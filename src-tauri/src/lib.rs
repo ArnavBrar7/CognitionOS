@@ -10,14 +10,22 @@ pub mod verification;
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .manage(memory::MemoryEngine::new())
+        .manage(runtime::RuntimeEngine::new())
+        .manage(constitution::ConstitutionEngine::new())
         .invoke_handler(tauri::generate_handler![
             router::route_request,
             memory::retrieve_memories,
+            memory::create_memory,
+            memory::delete_memory,
             decision::evaluate_action,
             constitution::get_constitution,
+            constitution::update_constitution_rule,
             tools::check_tool_permission,
             verification::verify_claim,
-            runtime::get_runtime_state
+            runtime::get_runtime_state,
+            runtime::load_model,
+            runtime::unload_model
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
