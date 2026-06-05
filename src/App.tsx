@@ -6,16 +6,8 @@ import Memory from "./pages/Memory";
 import Agents from "./pages/Agents";
 import Tools from "./pages/Tools";
 import Settings from "./pages/Settings";
-import Setup from "./pages/Setup";
-import { useAppStore } from "./store";
 
 function App() {
-  const isSetupComplete = useAppStore(state => state.isSetupComplete);
-
-  if (!isSetupComplete) {
-    return <Setup />;
-  }
-
   return (
     <Routes>
       <Route path="/" element={<AppLayout />}>
