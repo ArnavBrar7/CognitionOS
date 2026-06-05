@@ -42,3 +42,24 @@ pub fn evaluate_action(intent: String, proposed_action: String) -> Result<Decisi
         reasoning: reasoning.to_string()
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_evaluate_action_high_risk() {
+        let result = evaluate_action("I want to delete everything".into(), "sudo rm -rf /".into()).unwrap();
+        assert!(result.risk_level > 0.9);
+        assert_eq!(result.proceed, false);
+        assert_eq!(result.outcome_state, "Refuse");
+    }
+
+    #[test]
+    fn test_evaluate_action_safe() {
+        let result = evaluate_action("Tell me a joke".into(), "fetch_joke".into()).unwrap();
+        assert!(result.risk_level < 0.5);
+        assert_eq!(result.proceed, true);
+        assert_eq!(result.outcome_state, "Proceed");
+    }
+}

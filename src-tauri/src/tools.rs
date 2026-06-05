@@ -52,3 +52,22 @@ pub fn check_tool_permission(tool_name: String) -> Result<ToolPermission, String
         _ => Err(format!("Unknown tool requested: {}", tool_name)),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_check_tool_permission_terminal() {
+        let result = check_tool_permission("terminal_execution".into()).unwrap();
+        assert_eq!(result.is_enabled, false);
+        assert_eq!(result.requires_user_approval, true);
+        assert!(matches!(result.safety_level, SafetyLevel::Critical));
+    }
+
+    #[test]
+    fn test_check_tool_permission_unknown() {
+        let result = check_tool_permission("hack_mainframe".into());
+        assert!(result.is_err());
+    }
+}

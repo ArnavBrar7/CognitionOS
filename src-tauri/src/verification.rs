@@ -53,3 +53,27 @@ pub fn verify_claim(claims: Vec<String>, _context: String) -> Result<Verificatio
         claims_analyzed: analyzed_claims,
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_verify_claim_contradiction() {
+        let claims = vec!["I can guarantee 100% accuracy.".to_string()];
+        let result = verify_claim(claims, "context".into()).unwrap();
+
+        assert_eq!(result.is_safe_to_present, false);
+        assert_eq!(result.claims_analyzed.len(), 1);
+        assert_eq!(result.claims_analyzed[0].contradiction_found, true);
+    }
+
+    #[test]
+    fn test_verify_claim_safe() {
+        let claims = vec!["The system is designed with safety in mind.".to_string()];
+        let result = verify_claim(claims, "context".into()).unwrap();
+
+        assert_eq!(result.is_safe_to_present, true);
+        assert_eq!(result.claims_analyzed[0].contradiction_found, false);
+    }
+}

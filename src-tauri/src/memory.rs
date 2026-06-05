@@ -104,3 +104,17 @@ pub fn delete_memory(id: String, state: State<'_, MemoryEngine>) -> Result<(), S
         Err("Memory not found".into())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+
+    // We can test the underlying struct without needing Tauri State
+    #[test]
+    fn test_memory_engine_initialization() {
+        // Just verify it doesn't panic when trying to load/create files
+        let engine = MemoryEngine::new();
+        assert!(engine.storage_path.ends_with("cognitionos_memories.json"));
+    }
+}
