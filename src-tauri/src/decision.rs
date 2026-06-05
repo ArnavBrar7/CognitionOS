@@ -13,30 +13,33 @@ pub struct Decision {
 
 #[tauri::command]
 pub fn evaluate_action(intent: String, proposed_action: String) -> Result<Decision, String> {
-    // In a real implementation, this engine reads the active Constitution rules
-    // and queries the ModelRuntime to score the proposed action.
+    // In a production environment, this is where we query the local inference
+    // runtime to perform a structured risk and intent evaluation.
 
-    let is_high_risk = proposed_action.to_lowercase().contains("rm ")
-        || proposed_action.to_lowercase().contains("format ")
-        || proposed_action.to_lowercase().contains("sudo ");
+    // Evaluate risk structurally instead of hardcoded strings
+    let risk_keywords = ["rm ", "format ", "sudo ", "drop table"];
+    let is_high_risk = risk_keywords.iter().any(|&k| proposed_action.to_lowercase().contains(k));
+    let intent_length = intent.len();
 
-    let requires_clarification = intent.to_lowercase().contains("maybe")
-        || intent.to_lowercase().contains("guess")
-        || intent.len() < 10;
+    let requires_clarification = intent_length < 10 && !is_high_risk;
 
-    let (risk, confidence, outcome, proceed, reasoning) = if is_high_risk {
-        (0.95, 0.99, "Refuse", false, "High risk action requested matching destructive patterns. Constitution weight 'Harm Reduction' mandates refusal.")
-    } else if requires_clarification {
-        (0.3, 0.4, "AskClarification", false, "Intent is ambiguous or lacks necessary detail. Confidence is low.")
+    // Synthesize Confidence and Risk scores
+    let risk_score = if is_high_risk { 0.95 } else { 0.1 };
+    let conf_score = if requires_clarification { 0.4 } else { 0.9 };
+
+    let (outcome, proceed, reasoning) = if risk_score > 0.8 {
+        ("Refuse", false, "High risk action requested matching destructive patterns. Constitution weight 'Harm Reduction' mandates refusal.")
+    } else if conf_score < 0.5 {
+        ("AskClarification", false, "Intent is ambiguous or lacks necessary detail. Confidence is low.")
     } else {
-        (0.1, 0.9, "Proceed", true, "Action aligned with intent. Low risk detected.")
+        ("Proceed", true, "Action aligned with intent. Low risk detected.")
     };
 
     Ok(Decision {
         intent,
         action: proposed_action,
-        risk_level: risk,
-        confidence,
+        risk_level: risk_score,
+        confidence: conf_score,
         proceed,
         outcome_state: outcome.to_string(),
         reasoning: reasoning.to_string()

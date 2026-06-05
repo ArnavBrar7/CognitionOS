@@ -15,6 +15,8 @@ export interface Conversation {
 }
 
 interface AppState {
+  isSetupComplete: boolean;
+  setSetupComplete: (status: boolean) => void;
   currentModel: string | null;
   setCurrentModel: (model: string | null) => void;
   sidebarOpen: boolean;
@@ -28,6 +30,8 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
+  isSetupComplete: false,
+  setSetupComplete: (status) => set({ isSetupComplete: status }),
   currentModel: 'llama-3-8b.gguf',
   setCurrentModel: (model) => set({ currentModel: model }),
   sidebarOpen: true,
