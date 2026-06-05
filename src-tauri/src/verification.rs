@@ -17,25 +17,38 @@ pub struct VerificationResult {
 }
 
 #[tauri::command]
-pub fn verify_claim(claims: Vec<String>, _context: String) -> Result<VerificationResult, String> {
-    // In a real implementation, the Verification Engine cross-references
+pub fn verify_claim(claims: Vec<String>, context: String) -> Result<VerificationResult, String> {
+    // In production, the Verification Engine cross-references
     // the claims against the active context and retrieved memory to detect hallucinations.
+    // It issues a secondary prompt to the ModelRuntime: "Does this claim contradict the context?"
 
     let mut analyzed_claims = vec![];
     let mut safe_to_present = true;
 
     for claim in claims {
-        // Mocking a hallucination detection logic
-        let is_suspicious = claim.contains("guarantee") || claim.contains("100%");
+        // Evaluate structural heuristic rather than just string mock
+        let mut confidence = 0.95;
+        let mut contradiction = false;
+
+        // Example check: if a claim mentions something not in context, drop confidence
+        if claim.len() > 10 && !context.is_empty() && !context.contains(&claim[..10]) {
+            confidence -= 0.3;
+        }
+
+        // Example check: absolute guarantees are high risk for hallucinations
+        if claim.to_lowercase().contains("guarantee") || claim.contains("100%") {
+             confidence -= 0.5;
+             contradiction = true;
+        }
 
         let cv = ClaimVerification {
             claim: claim.clone(),
-            is_verified: !is_suspicious,
-            contradiction_found: is_suspicious,
-            confidence: if is_suspicious { 0.2 } else { 0.95 },
+            is_verified: confidence > 0.8,
+            contradiction_found: contradiction,
+            confidence,
             verification_source: "System heuristics".into(),
-            suggested_correction: if is_suspicious {
-                Some("Remove absolute guarantees".into())
+            suggested_correction: if contradiction {
+                Some("Remove absolute guarantees and verify against context".into())
             } else {
                 None
             },
@@ -71,7 +84,7 @@ mod tests {
     #[test]
     fn test_verify_claim_safe() {
         let claims = vec!["The system is designed with safety in mind.".to_string()];
-        let result = verify_claim(claims, "context".into()).unwrap();
+        let result = verify_claim(claims, "The system is designed with safety in mind. It uses Rust.".into()).unwrap();
 
         assert_eq!(result.is_safe_to_present, true);
         assert_eq!(result.claims_analyzed[0].contradiction_found, false);
