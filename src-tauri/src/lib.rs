@@ -25,8 +25,7 @@ pub fn run() {
             verification::verify_claim,
             runtime::get_runtime_state,
             runtime::load_model,
-            runtime::unload_model,
-            runtime::download_runtime_binary
+            runtime::unload_model
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

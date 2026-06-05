@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
-import { Download, Play, Trash2, HardDrive, StopCircle } from "lucide-react";
+import { Play, Trash2, HardDrive, StopCircle } from "lucide-react";
 
 interface RuntimeState {
   is_running: boolean;
@@ -51,9 +51,6 @@ export default function Models() {
           <h1 className="text-2xl font-semibold text-zinc-100">Models</h1>
           <p className="text-sm text-zinc-400 mt-1">Manage local GGUF models and runtime configurations.</p>
         </div>
-        <button className="flex items-center gap-2 bg-zinc-100 hover:bg-white text-zinc-900 px-4 py-2 rounded-md transition text-sm font-medium">
-          <Download className="w-4 h-4" /> Load Model
-        </button>
       </div>
 
       <div className="p-8 max-w-5xl mx-auto w-full space-y-8">
@@ -87,7 +84,7 @@ export default function Models() {
 
               <div className="flex gap-2">
                 <button onClick={handleUnload} className="flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-red-400/10 bg-zinc-950 border border-zinc-800 rounded-md transition text-sm">
-                  <StopCircle className="w-4 h-4" /> Stop Runtime
+                  <StopCircle className="w-4 h-4" /> Unload
                 </button>
               </div>
             </div>

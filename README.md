@@ -2,24 +2,20 @@
 
 ### The Cognitive Runtime for Local AI
 
-CognitionOS is an open-source cognitive runtime that transforms local LLMs into memory-capable, agentic, transparent, and decision-aware AI systems.
+CognitionOS is an open-source cognitive runtime that transforms local LLMs into memory-capable, transparent, and decision-aware AI systems.
 
 Instead of modifying model weights, CognitionOS operates as a runtime layer that enhances supported models with:
 
-* Long-term Memory
+* Persistent Memory
 * Decision Reasoning
-* Uncertainty Awareness
 * Verification Pipelines
-* Tool Governance
-* Agent Execution
 * Constitutional Behavior
 * Cognitive Tracing
+* Tool Governance
 
 CognitionOS combines:
 
-* Local Models (GGUF)
-* llama.cpp
-* Hermes Agent
+* Local Models (GGUF via native CLI)
 * CognitionOS Runtime
 
 to create a local-first intelligence platform.
@@ -37,27 +33,14 @@ CognitionOS Runtime
 * Memory Engine
 * Decision Engine
 * Verification Engine
-* Uncertainty Engine
 * Constitution Engine
 * Tool Governance Engine
 
 ↓
 
-Hermes Agent
-
-* Planning
-* Reflection
-* Tool Orchestration
-* State Tracking
-
-↓
-
 Local Model Runtime
 
-* llama.cpp
-* GGUF Models
-* GPU Acceleration
-* CPU Fallback
+* `llama-cli` GGUF Invocation
 
 ---
 
@@ -67,42 +50,24 @@ Local Model Runtime
 
 * Episodic Memory
 * Semantic Memory
-* Preference Memory
-* Project Memory
-* Persistent Storage
+* Persistent Storage (JSON-backed)
 * Memory Search
-* Memory Editing
+* Memory Deletion
 
 ### Decision Engine
 
-* Risk Assessment
+* Risk Assessment (Heuristic Evaluation)
 * Confidence Analysis
-* Missing Information Detection
 * Clarification Requests
-* Confirmation Workflows
 
 ### Verification
 
 * Contradiction Detection
-* Response Validation
-* Tool Validation
-* Hallucination Reduction
-
-### Agent System
-
-* Planning
-* Reflection
-* Multi-Step Execution
-* Tool Usage
-* State Tracking
+* Hallucination Reduction via Structural Confidence Checks
 
 ### Model Management
 
-* Ollama Discovery
-* Model Downloads
-* Download Resume
-* Metadata Management
-* Storage Management
+* Local GGUF Path execution mapping
 
 ### Cognitive Trace
 
@@ -111,8 +76,7 @@ Optional transparency layer showing:
 * Goal Detection
 * Risk Score
 * Confidence Score
-* Memory Usage
-* Tool Usage
+* Tools Used
 * Runtime Decisions
 
 Without exposing chain-of-thought.
@@ -121,19 +85,12 @@ Without exposing chain-of-thought.
 
 # Installation
 
-## One Command Setup
-
-Installs dependencies, runtime assets, llama.cpp integration, Hermes Agent integration, builds the desktop application, and prepares CognitionOS for first launch.
-
-```bash
-npm run setup
-```
-
----
-
 ## Run Development Mode
 
+Ensure you have Rust, Node.js, and a valid GGUF model binary configured.
+
 ```bash
+npm install
 npm run dev
 ```
 
@@ -150,44 +107,14 @@ npm run build
 Generated output:
 
 Windows
-
 ```text
 src-tauri/target/release/bundle/msi/
 ```
 
 macOS
-
 ```text
 src-tauri/target/release/bundle/dmg/
 ```
-
----
-
-# First Launch Experience
-
-On first launch CognitionOS automatically:
-
-* Verifies runtime dependencies
-* Verifies llama.cpp
-* Verifies Hermes Agent
-* Checks model availability
-* Creates runtime directories
-* Initializes memory systems
-
-No repeated setup required.
-
----
-
-# Supported Models
-
-* Hermes
-* Qwen
-* Llama
-* DeepSeek
-* Gemma
-* Mistral
-
-Through the CognitionOS Model Abstraction Layer.
 
 ---
 

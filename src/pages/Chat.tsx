@@ -181,6 +181,7 @@ export default function Chat() {
                 </div>
                 <div className="flex-1 pt-2">
                   <div className="h-2 w-24 bg-zinc-800 rounded animate-pulse"></div>
+                  <div className="text-xs text-zinc-500 mt-2 font-mono">Awaiting structural evaluation...</div>
                 </div>
              </div>
           )}

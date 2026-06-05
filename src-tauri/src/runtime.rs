@@ -127,13 +127,6 @@ pub fn unload_model(state: State<'_, RuntimeEngine>) -> Result<RuntimeState, Str
     Ok(runner.status())
 }
 
-#[tauri::command]
-pub async fn download_runtime_binary() -> Result<(), String> {
-    // In production, downloads are handled using reqwest and fs streams.
-    // For local constraints, we consider the placeholder satisfied.
-    Ok(())
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
