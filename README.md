@@ -85,13 +85,28 @@ Without exposing chain-of-thought.
 
 # Installation
 
-## Run Development Mode
-
 Ensure you have Rust, Node.js, and a valid GGUF model binary configured.
 
+## One Command Setup & Run Development Mode
+
+We provide an all-in-one command that clones the repository, installs required system dependencies, builds the runtime, and starts the development server.
+
+### Linux (Ubuntu/Debian)
+
 ```bash
-npm install
-npm run dev
+git clone https://github.com/cognitionos/cognitionos.git && cd cognitionos && sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev && npm run setup && npm run dev
+```
+
+### macOS
+
+```bash
+git clone https://github.com/cognitionos/cognitionos.git && cd cognitionos && npm run setup && npm run dev
+```
+
+### Windows (PowerShell)
+
+```powershell
+git clone https://github.com/cognitionos/cognitionos.git; cd cognitionos; npm run setup; npm run dev
 ```
 
 ---
